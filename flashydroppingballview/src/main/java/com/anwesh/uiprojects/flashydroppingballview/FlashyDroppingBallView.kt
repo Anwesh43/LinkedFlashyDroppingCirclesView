@@ -25,3 +25,28 @@ fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
+
+fun Canvas.drawFlashyDroppingBall(scale : Float, size : Float, h : Float, paint : Paint) {
+    var sk : Float = 1f
+    for (j in 0..(parts - 2)) {
+        var scj : Float = scale.divideScale(j, parts)
+        if (scj <= 0f) {
+            break
+        }
+        sk *= scj.sinify()
+    }
+    val scLast : Float = scale.divideScale(parts - 1, parts)
+    drawCircle(0f, size + h * scLast, size * (1 - sk), paint)
+}
+
+fun Canvas.drawFDBNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = w / (nodes + 1)
+    val size : Float = gap / sizeFactor
+    paint.color = foreColor
+    save()
+    translate(gap * i + 1, 0f)
+    drawFlashyDroppingBall(scale, size, h, paint)
+    restore()
+}
