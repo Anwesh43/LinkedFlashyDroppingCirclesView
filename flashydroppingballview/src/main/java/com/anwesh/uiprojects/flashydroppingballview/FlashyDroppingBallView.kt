@@ -180,4 +180,27 @@ class FlashyDroppingBallView(ctx : Context) : View(ctx) {
         }
     }
 
+    data class Renderer(var view : FlashyDroppingBallView) {
+
+        private val animator : Animator = Animator(view)
+        private val fdb : FlashyDroppingBall = FlashyDroppingBall(0)
+        private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+        fun render(canvas : Canvas) {
+            canvas.drawColor(backColor)
+            fdb.draw(canvas, paint)
+            animator.animate {
+                fdb.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            fdb.startUpdating {
+                animator.start()
+            }
+        }
+    }
+
 }
