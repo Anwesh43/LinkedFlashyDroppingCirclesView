@@ -203,4 +203,12 @@ class FlashyDroppingBallView(ctx : Context) : View(ctx) {
         }
     }
 
+    companion object {
+
+        fun create(activity : Activity) : FlashyDroppingBallView {
+            val view : FlashyDroppingBallView = FlashyDroppingBallView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
