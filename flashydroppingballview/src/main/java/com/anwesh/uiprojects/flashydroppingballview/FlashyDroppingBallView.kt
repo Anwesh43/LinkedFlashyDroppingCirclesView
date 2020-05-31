@@ -14,8 +14,7 @@ import android.graphics.Color
 
 val nodes : Int = 5
 val parts : Int = 5
-val scGap : Float = 0.05f / parts
-val strokeFactor : Int = 90
+val scGap : Float = 0.02f / parts
 val sizeFactor : Float = 2.9f
 val foreColor : Int = Color.parseColor("#4CAF50")
 val backColor : Int = Color.parseColor("#BDBDBD")
@@ -27,13 +26,10 @@ fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
 
 fun Canvas.drawFlashyDroppingBall(scale : Float, size : Float, h : Float, paint : Paint) {
-    var sk : Float = 1f
-    for (j in 0..(parts - 2)) {
-        var scj : Float = scale.divideScale(j, parts)
-        if (scj <= 0f) {
-            break
-        }
-        sk *= scj.sinify()
+    var i : Int = (scale * parts).toInt()
+    var sk : Float = 0f
+    if (i != parts - 1) {
+        sk = scale.divideScale(i, parts).sinify()
     }
     val scLast : Float = scale.divideScale(parts - 1, parts)
     drawCircle(0f, size + h * scLast, size * (1 - sk), paint)
@@ -46,7 +42,7 @@ fun Canvas.drawFDBNode(i : Int, scale : Float, paint : Paint) {
     val size : Float = gap / sizeFactor
     paint.color = foreColor
     save()
-    translate(gap * i + 1, 0f)
+    translate(gap * (i + 1), 0f)
     drawFlashyDroppingBall(scale, size, h, paint)
     restore()
 }
